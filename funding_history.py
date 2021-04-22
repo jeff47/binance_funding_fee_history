@@ -32,6 +32,7 @@ excludelist = ('ETHUSDT_210625', 'BTCUSDT_210625')
 
 # Now query the Binance API again, fetching the history for each symbol
 all_agg_df = pd.DataFrame()
+all_data_df = pd.DataFrame()
 for i in futures:
     if i["symbol"] in excludelist: continue
     if verbose: print(i["symbol"])
@@ -45,9 +46,13 @@ for i in futures:
 
     # Calculate Exponential weighted moving average
     df['EWMA'] = df['fundingRate'].ewm(span=span,adjust=False).mean()
+    all_data_df = all_data_df.append(df)
     agg_df = df.groupby('symbol').fundingRate.agg(['mean', 'std', 'min', 'max', 'count'])
     agg_df.insert(0, 'EWMA', df['EWMA'].tail(1).to_string(index=False))
     all_agg_df = all_agg_df.append(agg_df)
 
+rawdata_csv = "funding_fees_raw_" + str(days) + "d.csv"
 aggdata_csv = "funding_fees_stats_" + str(days) + "d.csv"
 all_agg_df.to_csv(aggdata_csv)
+all_data_df.to_csv(rawdata_csv, index = False)
+
