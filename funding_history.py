@@ -13,7 +13,7 @@ import datetime as dt
 
 # How many days of history to get?  333 seems to be the max.
 all_args = argparse.ArgumentParser()
-all_args.add_argument("-d", "--days", required=True, type=int, help="Days of history to retrieve. 333 seems to be the maximum.")
+all_args.add_argument("-d", "--days", default=7, required,False, type=int, help="Days of history to retrieve. 333 seems to be the maximum.")
 all_args.add_argument("-s", "--span", default=9, required=False, type=int, help="Decay setting.  Higher numbers result in less weighting of recent rates. Defaults to 9 (96 hours).")
 all_args.add_argument("-v", "--verbose", action="store_true", help="Print symbols as they are fetched.")
 
